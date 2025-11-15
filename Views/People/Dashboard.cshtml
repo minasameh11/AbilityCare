@@ -1,0 +1,211 @@
+﻿@{
+    ViewData["Title"] = "لوحة التحكم";
+    Layout = "_Layout";
+}
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4 fw-bold text-primary">📊 لوحة التحكم</h2>
+
+    <!-- 🔹 الصف الأول: إجماليات -->
+    <div class="row g-3 mb-4 text-center">
+        <div class="col-md-3 col-sm-6">
+            <div class="card shadow-sm border-0 p-3 bg-light rounded-4">
+                <h6 class="text-muted">👥 إجمالي الأشخاص</h6>
+                <h2 class="fw-bold text-success">@ViewBag.TotalPeople</h2>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-6">
+            <div class="card shadow-sm border-0 p-3 bg-light rounded-4">
+                <h6 class="text-muted">👨 عدد الذكور</h6>
+                <h2 class="fw-bold text-info">@ViewBag.MaleCount</h2>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-6">
+            <div class="card shadow-sm border-0 p-3 bg-light rounded-4">
+                <h6 class="text-muted">👩 عدد الإناث</h6>
+                <h2 class="fw-bold text-danger">@ViewBag.FemaleCount</h2>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-6">
+            <div class="card shadow-sm border-0 p-3 bg-light rounded-4">
+                <h6 class="text-muted">♿ أكثر نوع إعاقة</h6>
+                <h4 class="fw-bold text-warning">@ViewBag.TopDisability</h4>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🔹 الصف الثاني: التحليلات -->
+    <div class="row g-3 mb-4 text-center">
+        <div class="col-md-3 col-sm-6">
+            <div class="card shadow-sm border-0 p-3 bg-light rounded-4">
+                <h6 class="text-muted">📈 متوسط نسبة الحضور</h6>
+                <h2 class="fw-bold text-success">@String.Format("{0:0.0}%", ViewBag.AttendanceRate)</h2>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-6">
+            <div class="card shadow-sm border-0 p-3 bg-light rounded-4">
+                <h6 class="text-muted">📉 أعلى نسبة غياب</h6>
+                <h2 class="fw-bold text-danger">@ViewBag.MaxAbsenceRate%</h2>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-6">
+            <div class="card shadow-sm border-0 p-3 bg-light rounded-4">
+                <h6 class="text-muted">🗓️ عدد الاجتماعات</h6>
+                <h2 class="fw-bold text-primary">@ViewBag.MeetingCount</h2>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-6">
+            <div class="card shadow-sm border-0 p-3 bg-light rounded-4">
+                <h6 class="text-muted">📍 أكثر منطقة غيابًا</h6>
+                <h4 class="fw-bold text-danger">@ViewBag.TopAbsentArea</h4>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🔹 الصف الثالث: إضافات وتحليلات -->
+    <div class="row g-3 mb-4 text-center">
+        <div class="col-md-3 col-sm-6">
+            <div class="card shadow-sm border-0 p-3 bg-light rounded-4">
+                <h6 class="text-muted">🆕 آخر الأشخاص المضافين</h6>
+                <ul class="list-unstyled mb-0 small">
+                    @foreach (var p in (ViewBag.RecentPeople as List<ChurchService.Models.Person>)?.Take(5) ?? new List<ChurchService.Models.Person>())
+                    {
+                        <li>@p.FullName <small class="text-secondary">(@p.Area)</small></li>
+                    }
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-6">
+            <div class="card shadow-sm border-0 p-3 bg-light rounded-4">
+                <h6 class="text-muted">♿ عدد ذوي الإعاقة</h6>
+                <h2 class="fw-bold text-warning">@ViewBag.DisabledCount</h2>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-6">
+            <div class="card shadow-sm border-0 p-3 bg-light rounded-4">
+                <h6 class="text-muted">🏅 الأكثر التزامًا بالحضور</h6>
+                <h5 class="fw-bold text-success">@ViewBag.TopAttendeeName</h5>
+                <p class="text-muted small mb-0">نسبة: @ViewBag.TopAttendeeRate%</p>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-6">
+            <div class="card shadow-sm border-0 p-3 bg-light rounded-4">
+                <h6 class="text-muted">🕒 اجتماعات هذا الشهر</h6>
+                <h2 class="fw-bold text-primary">@ViewBag.MeetingsThisMonth</h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🔹 الرسم البياني -->
+    <div class="row justify-content-center mb-5">
+        <div class="col-md-8">
+            <h4 class="text-center text-secondary mb-3">📈 توزيع الأشخاص حسب المنطقة</h4>
+            <canvas id="areaChart" width="400" height="200"></canvas>
+        </div>
+    </div>
+
+    <!-- 🔹 جدول الإحصائيات -->
+    <h4 class="text-center text-secondary mb-3">📋 إحصائيات حسب المنطقة</h4>
+    <table class="table table-striped text-center shadow-sm">
+        <thead class="table-primary">
+            <tr>
+                <th>المنطقة</th>
+                <th>عدد الأشخاص</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in ViewBag.AreaStats as List<(string Area, int Count)>)
+            {
+                <tr>
+                    <td>@item.Area</td>
+                    <td>@item.Count</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <hr class="my-4" />
+
+    <!-- 🔹 الأشخاص كثيرو الغياب -->
+    <h4 class="text-center text-danger mb-3">🚨 الأشخاص الذين يتغيبون كثيرًا</h4>
+    <input type="text" id="searchInput" class="form-control mb-3 w-50 mx-auto" placeholder="🔍 ابحث بالاسم...">
+
+    @if ((ViewBag.FrequentAbsentees as List<ChurchService.Models.Person>)?.Any() ?? false)
+    {
+        <table class="table table-bordered text-center shadow-sm">
+            <thead class="table-danger">
+                <tr>
+                    <th>الاسم</th>
+                    <th>المنطقة</th>
+                    <th>النوع</th>
+                    <th>نوع الإعاقة</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var person in ViewBag.FrequentAbsentees as List<ChurchService.Models.Person>)
+                {
+                    <tr>
+                        <td>@person.FullName</td>
+                        <td>@person.Area</td>
+                        <td>@person.Gender</td>
+                        <td>@person.DisabilityType</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="text-center text-muted">🎉 لا يوجد أشخاص يتغيبون كثيرًا</p>
+    }
+</div>
+
+@section Scripts {
+    <script src="~/lib/chartjs/chart.umd.min.js"></script>
+    <script>
+        // 🎨 الرسم البياني للمناطق
+        const ctx = document.getElementById('areaChart');
+        const areaLabels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+        (ViewBag.AreaStats as List<(string Area, int Count)>).Select(x => x.Area)
+    ));
+        const areaCounts = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+        (ViewBag.AreaStats as List<(string Area, int Count)>).Select(x => x.Count)
+    ));
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: areaLabels,
+                datasets: [{
+                    label: 'عدد الأشخاص',
+                    data: areaCounts,
+                    borderWidth: 1,
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true } }
+            }
+        });
+
+        // 🔍 البحث في جدول الغياب
+        document.getElementById("searchInput").addEventListener("keyup", function () {
+            var value = this.value.toLowerCase();
+            document.querySelectorAll("table tbody tr").forEach(function (row) {
+                row.style.display = row.textContent.toLowerCase().includes(value) ? "" : "none";
+            });
+        });
+    </script>
+}

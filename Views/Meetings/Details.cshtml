@@ -1,0 +1,70 @@
+﻿@model ChurchService.Models.Meeting
+@{
+    ViewData["Title"] = "تفاصيل الاجتماع";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg p-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="text-primary">📅 تفاصيل الاجتماع</h3>
+            <a asp-action="Index" class="btn btn-secondary">رجوع</a>
+        </div>
+
+        <hr />
+
+        <div class="mb-4">
+            <p><strong>🧾 اسم الاجتماع:</strong> @Model.Name</p>
+            <p><strong>📆 التاريخ:</strong> @Model.Date.ToString("yyyy-MM-dd")</p>
+        </div>
+
+        <h5 class="text-success mb-3">👥 قائمة الحضور</h5>
+
+        @if (Model.Attendances != null && Model.Attendances.Any())
+        {
+            <table class="table table-bordered text-center align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>الاسم</th>
+                        <th>المنطقة</th>
+                        <th>نوع الإعاقة</th>
+                        <th>الحالة</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var attendance in Model.Attendances)
+                    {
+                        <tr>
+                            <td>@attendance.Person.FullName</td>
+                            <td>@attendance.Person.Area</td>
+                            <td>@attendance.Person.DisabilityType</td>
+                            <td>
+                                @if (attendance.IsPresent)
+                                {
+                                    <span class="badge bg-success">✅ حضر</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">❌ غاب</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="alert alert-info text-center">
+                لا توجد بيانات حضور بعد لهذا الاجتماع.
+            </div>
+        }
+
+        <div class="mt-4 text-center">
+            <a asp-controller="Attendance" asp-action="Mark" asp-route-meetingId="@Model.Id" class="btn btn-primary">
+                📝 تسجيل الحضور
+            </a>
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">✏️ تعديل الاجتماع</a>
+            <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">🗑️ حذف</a>
+        </div>
+    </div>
+</div>

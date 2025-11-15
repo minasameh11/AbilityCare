@@ -1,0 +1,33 @@
+﻿@model List<ChurchService.Models.AttendanceViewModel>
+
+<div class="container mt-4">
+    <h3 class="text-center mb-4">📝 تسجيل الحضور - @ViewBag.MeetingName</h3>
+
+    <form asp-action="Mark" method="post">
+        <input type="hidden" name="meetingId" value="@ViewBag.MeetingId" />
+
+        <table class="table table-bordered table-striped text-center">
+            <thead class="table-dark">
+                <tr>
+                    <th>الاسم</th>
+                    <th>حاضر؟</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    <tr>
+                        <td>@Model[i].PersonName</td>
+                        <td>
+                            <input type="hidden" name="[@i].PersonId" value="@Model[i].PersonId" />
+                            <input type="checkbox" name="[@i].IsPresent" value="true" @(Model[i].IsPresent ? "checked" : "") />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <button type="submit" class="btn btn-primary">💾 حفظ الحضور</button>
+        <a asp-controller="Meetings" asp-action="Index" class="btn btn-secondary">🔙 رجوع</a>
+    </form>
+</div>

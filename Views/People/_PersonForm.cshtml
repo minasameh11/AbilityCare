@@ -1,0 +1,119 @@
+﻿@model ChurchService.Models.Person
+
+<div class="row">
+    <div class="col-md-6">
+        <label asp-for="FullName"></label>
+        <input asp-for="FullName" class="form-control" />
+        <span asp-validation-for="FullName" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="NationalId"></label>
+        <input asp-for="NationalId" class="form-control" />
+        <span asp-validation-for="NationalId" class="text-danger"></span>
+    </div>
+</div>
+
+<div class="row mt-2">
+    <div class="col-md-6">
+        <label asp-for="BirthDate"></label>
+        <input asp-for="BirthDate" class="form-control" type="date" />
+        <span asp-validation-for="BirthDate" class="text-danger"></span>
+    </div>
+    <div class="col-md-6">
+        <label asp-for="Gender"></label>
+        <select asp-for="Gender" class="form-control">
+            <option value="">اختر...</option>
+            <option value="ذكر">ذكر</option>
+            <option value="أنثى">أنثى</option>
+        </select>
+        <span asp-validation-for="Gender" class="text-danger"></span>
+    </div>
+</div>
+
+<div class="row mt-2">
+    <div class="col-md-6">
+        <label asp-for="Phone1"></label>
+        <input asp-for="Phone1" class="form-control" />
+        <span asp-validation-for="Phone1" class="text-danger"></span>
+    </div>
+    <div class="col-md-6">
+        <label asp-for="Phone2"></label>
+        <input asp-for="Phone2" class="form-control" />
+    </div>
+</div>
+
+<div class="row mt-2">
+    <div class="col-md-6">
+        <label asp-for="Address"></label>
+        <input asp-for="Address" class="form-control" />
+        <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+    
+    <div class="col-md-6">
+        <label asp-for="Area"></label>
+        <select asp-for="Area" class="form-control">
+            <option value="">اختر...</option>
+            <option value="الوحدة والزاوية">الوحدة والزاوية  </option>
+            <option value="الكنيسة ">الكنيسة </option>
+            <option value="المشروع الغربي">المشروع الغربي </option>
+            <option value="العزبة ">العزبة </option>
+            <option value="القديسة فيرينا ">القديسة فيرينا  </option>
+        </select>
+        <span asp-validation-for="Area" class="text-danger"></span>
+    </div>
+
+</div>
+
+<div class="row mt-2">
+    <div class="col-md-6">
+        <label asp-for="DisabilityType"></label>
+        <input asp-for="DisabilityType" class="form-control" />
+        <span asp-validation-for="DisabilityType" class="text-danger"></span>
+    </div>
+
+
+
+    <div class="col-md-6">
+        <label asp-for="DisabilityDegree"></label>
+        <select asp-for="DisabilityDegree" class="form-control">
+            <option value="">اختر...</option>
+            <option value=" خفيفة"> خفيفة </option>
+            <option value="متوسطة ">متوسطة </option>
+            <option value="  شديدة ">  شديدة  </option>
+            <option value="شديدة جدًا ">شديدة جدًا  </option>
+        </select>
+        <span asp-validation-for="DisabilityDegree" class="text-danger"></span>
+    </div>
+
+
+
+</div>
+
+<div class="mt-2">
+    <label asp-for="Notes"></label>
+    <textarea asp-for="Notes" class="form-control"></textarea>
+</div>
+
+
+<div class="mb-3">
+    <label class="form-label fw-bold">صورة الشخص</label>
+    <input type="file" name="photo" id="photoInput" class="form-control" accept="image/*" />
+
+    <div class="mt-3 text-center">
+        <img id="previewImg"
+             src="@(Model?.PhotoPath ?? "")"
+             alt="Preview"
+             class="img-thumbnail rounded-3 shadow-sm"
+             style="max-width: 200px; display:@(string.IsNullOrEmpty(Model?.PhotoPath) ? "none" : "block");" />
+
+        <br />
+        <button id="removePhotoBtn"
+                class="btn btn-outline-danger btn-sm mt-2"
+                type="button"
+                style="display:@(string.IsNullOrEmpty(Model?.PhotoPath) ? "none" : "inline-block");">
+            🗑️ حذف الصورة
+        </button>
+    </div>
+</div>
+

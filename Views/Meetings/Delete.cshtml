@@ -1,0 +1,27 @@
+﻿@model ChurchService.Models.Meeting
+@{
+    ViewData["Title"] = "🗑️ حذف الاجتماع";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg p-4 border-danger">
+        <h3 class="text-center mb-4 text-danger">⚠️ تأكيد حذف الاجتماع</h3>
+
+        <div class="alert alert-warning text-center">
+            <p>هل أنت متأكد من حذف الاجتماع التالي؟</p>
+        </div>
+
+        <div class="mb-3">
+            <p><strong>الاسم:</strong> @Model.Name</p>
+            <p><strong>التاريخ:</strong> @Model.Date.ToString("yyyy-MM-dd")</p>
+        </div>
+
+        <form asp-action="Delete" method="post">
+            <input type="hidden" asp-for="Id" />
+            <div class="text-center">
+                <button type="submit" class="btn btn-danger px-4">🗑️ تأكيد الحذف</button>
+                <a asp-action="Index" class="btn btn-secondary px-4">إلغاء</a>
+            </div>
+        </form>
+    </div>
+</div>

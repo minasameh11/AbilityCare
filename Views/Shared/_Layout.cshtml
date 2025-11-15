@@ -1,0 +1,121 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - خدمة أبناء الملكوت</title>
+
+    <!-- 🟢 ملفات محلية بدل الـ CDN -->
+    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.rtl.min.css" />
+    <style>
+        @@font -face {
+            font-family: 'Cairo';
+            src: url('~/lib/fonts/Cairo.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: #f8f9fc;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background: linear-gradient(90deg, #4e73df, #1cc88a);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            color: #fff !important;
+        }
+
+        .nav-link {
+            color: #fff !important;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+            .nav-link:hover {
+                text-decoration: underline;
+                color: #f1f1f1 !important;
+            }
+
+        main {
+            flex: 1;
+            padding: 30px;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            background: #fff;
+            border-top: 1px solid #ddd;
+            color: #666;
+            font-size: 14px;
+        }
+
+        @@keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .btn-main {
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+            .btn-main:hover {
+                transform: scale(1.05);
+            }
+    </style>
+</head>
+<body>
+    <!-- شريط التنقل -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" asp-controller="Home" asp-action="Index">🏠 خدمة أبناء الملكوت</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">الرئيسية</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="People" asp-action="Index">الأشخاص</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="People" asp-action="Create">إضافة شخص</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="People" asp-action="Dashboard">لوحة التحكم</a></li>
+                    <li class="nav-item"><a class="nav-link text-dark" asp-controller="Home" asp-action="About">من نحن</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- المحتوى -->
+    <main role="main" class="container">
+        @RenderBody()
+    </main>
+
+    <!-- الفوتر -->
+    <footer>
+        © @DateTime.Now.Year خدمة أبناء الملكوت - جميع الحقوق محفوظة ✝️
+    </footer>
+
+    <!-- 🟢 سكربتات محلية -->
+    <script src="~/lib/chartjs/chart.umd.min.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

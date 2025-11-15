@@ -1,0 +1,161 @@
+﻿@model IEnumerable<ChurchService.Models.Person>
+
+@{
+    ViewData["Title"] = "إدارة الأشخاص";
+}
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4 fw-bold text-primary">👥 إدارة الأشخاص</h2>
+
+    <!-- ✅ فورم البحث -->
+    <form method="get" class="row g-3 align-items-end mb-4 bg-light p-3 rounded shadow-sm">
+        <!-- البحث بالاسم -->
+        <div class="col-md-3">
+            <label class="form-label fw-bold">الاسم</label>
+            <input type="text" name="searchName" class="form-control" placeholder="ابحث بالاسم" value="@ViewBag.SearchName" />
+        </div>
+
+        <!-- البحث بالمنطقة -->
+        <div class="col-md-3">
+            <label class="form-label fw-bold">المنطقة</label>
+            <select name="searchArea" class="form-control">
+                <option value="">اختر المنطقة...</option>
+                @foreach (var area in new[] { "الوحدة والزاوية", "الكنيسة", "المشروع الغربي", "العزبة", "القديسه فيرينا" })
+                {
+                    <option value="@area" selected="@(ViewBag.SearchArea == (string)area ? "selected" : null)">@area</option>
+                }
+            </select>
+        </div>
+
+        <!-- البحث بالنوع -->
+        <div class="col-md-2">
+            <label class="form-label fw-bold">النوع</label>
+            <select name="searchGender" class="form-control">
+                <option value="">اختر النوع...</option>
+                <option value="ذكر" selected="@(ViewBag.SearchGender == "ذكر" ? "selected" : null)">ذكر</option>
+                <option value="أنثى" selected="@(ViewBag.SearchGender == "أنثى" ? "selected" : null)">أنثى</option>
+            </select>
+        </div>
+
+      
+
+         <!-- البحث بنوع الإعاقة --> 
+     <div class="col-md-2"> 
+             <label class="form-label fw-bold">درجة الإعاقة</label> 
+             <select name="searchDisabilityDegree" class="form-control"> 
+                <option value="">اختر...</option> 
+                 <option value="خفيفة" selected="@(ViewBag.SearchDisabilityDegree == "خفيفة")">خفيفة</option> 
+                   <option value="متوسطة" selected="@(ViewBag.SearchDisabilityDegree == "متوسطة")">متوسطة</option> 
+                 <option value="شديدة" selected="@(ViewBag.SearchDisabilityDegree == "شديدة")">شديدة</option> 
+                 <option value="شديدة جدًا" selected="@(ViewBag.SearchDisabilityDegree == "شديدة جدًا")">شديدة جدًا</option> 
+             </select> 
+         </div> 
+
+        <!-- أزرار -->
+        <div class="col-md-2 d-flex gap-2">
+            <button class="btn btn-sm btn-primary flex-fill shadow-sm px-3" type="submit">بحث 🔍</button>
+            <a asp-action="Index" class="btn btn-sm btn-outline-secondary flex-fill shadow-sm px-3">إلغاء ❌</a>
+        </div>
+    </form>
+
+    <!-- ✅ كارت الإجمالي وزر الإضافة في نفس السطر -->
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
+        <div class="card bg-primary text-white small shadow-sm border-0 mb-2" style="min-width: 160px;">
+            <div class="card-body p-2 d-flex justify-content-center align-items-center gap-2">
+                <span>👥 الإجمالي:</span>
+                <span class="fw-bold">@ViewBag.TotalItems</span>
+            </div>
+        </div>
+
+        <a asp-action="Create" class="btn btn-success btn-sm shadow-sm px-3 mb-2">
+            ➕ إضافة شخص جديد
+        </a>
+    </div>
+
+    <!-- ✅ الجدول -->
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered text-center shadow-sm align-middle">
+            <thead class="table-primary">
+                <tr>
+                    <th>الاسم</th>
+                    <th>المنطقة</th>
+                    <th>النوع</th>
+                    <th>نوع الإعاقة</th>
+                    <th>الهاتف</th>
+                    <th>خيارات</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.FullName</td>
+                            <td>@item.Area</td>
+                            <td>@item.Gender</td>
+                            <td>@item.DisabilityType</td>
+                            <td>@item.Phone1</td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">عرض</a>
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm text-white">تعديل</a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">حذف</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-muted">😔 لا توجد نتائج مطابقة</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ✅ ترقيم الصفحات -->
+    @{
+        int totalPages = (int)Math.Ceiling((double)ViewBag.TotalItems / (int)ViewBag.PageSize);
+        int currentPage = ViewBag.PageNumber;
+    }
+
+    @if (totalPages > 1)
+    {
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center">
+                <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                    <a class="page-link" asp-action="Index"
+                       asp-route-pageNumber="@(currentPage - 1)"
+                       asp-route-searchName="@ViewBag.SearchName"
+                       asp-route-searchArea="@ViewBag.SearchArea"
+                       asp-route-searchGender="@ViewBag.SearchGender"
+                       asp-route-searchDisability="@ViewBag.SearchDisability">السابق</a>
+                </li>
+
+                @for (int i = 1; i <= totalPages; i++)
+                {
+                    <li class="page-item @(i == currentPage ? "active" : "")">
+                        <a class="page-link" asp-action="Index"
+                           asp-route-pageNumber="@i"
+                           asp-route-searchName="@ViewBag.SearchName"
+                           asp-route-searchArea="@ViewBag.SearchArea"
+                           asp-route-searchGender="@ViewBag.SearchGender"
+                           asp-route-searchDisability="@ViewBag.SearchDisability">@i</a>
+                    </li>
+                }
+
+                <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                    <a class="page-link" asp-action="Index"
+                       asp-route-pageNumber="@(currentPage + 1)"
+                       asp-route-searchName="@ViewBag.SearchName"
+                       asp-route-searchArea="@ViewBag.SearchArea"
+                       asp-route-searchGender="@ViewBag.SearchGender"
+                       asp-route-searchDisability="@ViewBag.SearchDisability">التالي</a>
+                </li>
+            </ul>
+        </nav>
+    }
+</div>

@@ -1,0 +1,60 @@
+﻿@model ChurchService.Models.Person
+@{
+    ViewData["Title"] = "إضافة شخص جديد";
+}
+
+<div class="container mt-5">
+    <div class="card shadow p-4 rounded-4">
+        <h3 class="text-center text-primary mb-4 fw-bold">إضافة شخص جديد</h3>
+
+        <form asp-action="Create" enctype="multipart/form-data" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            @Html.Partial("_PersonForm", Model)
+
+            <div class="d-flex justify-content-between mt-4">
+                <button type="submit" class="btn btn-success px-4">
+                    💾 حفظ
+                </button>
+                <a asp-action="Index" class="btn btn-secondary px-4">رجوع</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        // ✅ لما المستخدم يختار صورة
+        const photoInput = document.getElementById("photoInput");
+        const previewImg = document.getElementById("previewImg");
+        const removeBtn = document.getElementById("removePhotoBtn");
+
+        if (photoInput) {
+            photoInput.addEventListener("change", (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (event) {
+                        previewImg.src = event.target.result;
+                        previewImg.style.display = "block";
+                        removeBtn.style.display = "inline-block";
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        // ✅ زرار حذف الصورة
+        if (removeBtn) {
+            removeBtn.addEventListener("click", function (e) {
+                e.preventDefault();
+                photoInput.value = "";
+                previewImg.src = "";
+                previewImg.style.display = "none";
+                removeBtn.style.display = "none";
+            });
+        }
+    </script>
+}

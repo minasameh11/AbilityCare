@@ -1,0 +1,28 @@
+# .NET Build Output
+bin/
+obj/
+publish/
+
+# Visual Studio
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.vs/
+*.vscode/
+
+# NuGet
+*.nupkg
+packages/
+
+# Appsettings
+appsettings.*.json
+!appsettings.json
+
+# Logs
+*.log
+
+# Runtime
+*.dll
+*.exe
+*.pdb
